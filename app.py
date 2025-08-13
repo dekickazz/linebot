@@ -1,39 +1,39 @@
 import os
-... from flask import Flask, request, abort
-... from linebot import LineBotApi, WebhookHandler
-... from linebot.exceptions import InvalidSignatureError
-... from linebot.models import MessageEvent, TextMessage, TextSendMessage
-... 
-... app = Flask(__name__)
-... 
-... # ดึงข้อมูล Access Token และ Channel Secret จาก Environment Variables
-... # เพื่อความปลอดภัย เราจะไม่เก็บค่าเหล่านี้ไว้ในโค้ดโดยตรง
-... channel_access_token = os.environ.get('LINE_CHANNEL_ACCESS_TOKEN')
-... channel_secret = os.environ.get('LINE_CHANNEL_SECRET')
-... 
-... # ตรวจสอบว่าได้ตั้งค่า Environment Variables ครบถ้วนหรือไม่
-... if not channel_access_token or not channel_secret:
-...     print("กรุณาตั้งค่า Environment Variables: LINE_CHANNEL_ACCESS_TOKEN และ LINE_CHANNEL_SECRET")
-...     exit()
-... 
-... line_bot_api = LineBotApi(channel_access_token)
-... handler = WebhookHandler(channel_secret)
-... 
-... # สร้าง Endpoint สำหรับรับ Webhook จาก LINE
-... @app.route("/callback", methods=['POST'])
-... def callback():
-...     # รับ X-Line-Signature header value
-...     signature = request.headers['X-Line-Signature']
-... 
-...     # รับ request body เป็น text
-...     body = request.get_data(as_text=True)
-...     app.logger.info("Request body: " + body)
-... 
-...     # จัดการ webhook body
-...     try:
-...         handler.handle(body, signature)
-...     except InvalidSignatureError:
-...         abort(400)
+from flask import Flask, request, abort
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
+
+app = Flask(__name__)
+
+# ดึงข้อมูล Access Token และ Channel Secret จาก Environment Variables
+# เพื่อความปลอดภัย เราจะไม่เก็บค่าเหล่านี้ไว้ในโค้ดโดยตรง
+channel_access_token = os.environ.get('LINE_CHANNEL_ACCESS_TOKEN')
+channel_secret = os.environ.get('LINE_CHANNEL_SECRET')
+
+# ตรวจสอบว่าได้ตั้งค่า Environment Variables ครบถ้วนหรือไม่
+if not channel_access_token or not channel_secret:
+     print("กรุณาตั้งค่า Environment Variables: LINE_CHANNEL_ACCESS_TOKEN และ LINE_CHANNEL_SECRET")
+     exit()
+ 
+ line_bot_api = LineBotApi(channel_access_token)
+ handler = WebhookHandler(channel_secret)
+ 
+ # สร้าง Endpoint สำหรับรับ Webhook จาก LINE
+ @app.route("/callback", methods=['POST'])
+ def callback():
+     # รับ X-Line-Signature header value
+     signature = request.headers['X-Line-Signature']
+ 
+     # รับ request body เป็น text
+     body = request.get_data(as_text=True)
+     app.logger.info("Request body: " + body)
+ 
+     # จัดการ webhook body
+     try:
+         handler.handle(body, signature)
+     except InvalidSignatureError:
+         abort(400)
 
     return 'OK'
 
