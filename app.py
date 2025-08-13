@@ -55,10 +55,15 @@ def handle_message(event):
     # โค้ดที่อยู่ข้างในฟังก์ชันนี้ ต้องย่อหน้าเข้าไป 1 ระดับ (4 spaces)
     user_message = event.message.text.lower()
 
-    if user_message == 'promotion':
-        reply_message = 'นี่คือโปรโมชั่นสุดพิเศษประจำเดือนนี้ครับ!'
-    elif user_message == 'products':
-        reply_message = 'สินค้าของเรามีดังนี้ครับ...\n1. สินค้า A\n2. สินค้า B\n3. สินค้า C'
+    if user_message == 'FLT OPS':
+        reply_message = 'เดือนนี้โดนตัดตารางหรือยัง?'
+    if user_message == 'ENGINEER':
+        reply_message = 'APU INOP NA KA'
+    if user_message == 'GS':
+        reply_message = 'หวานเผ็ด'
+    if user_message == 'RAMP':
+        reply_message = 'แร้มป์พลังม้า'
+        
     else:
         reply_message = 'สวัสดีครับ! กรุณาเลือกเมนูด้านล่างเพื่อดูข้อมูลที่ต้องการครับ'
 
